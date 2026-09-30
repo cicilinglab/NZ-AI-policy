@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light" />
+<title>AI Governance Timeline 2019–2026 — Aotearoa New Zealand Highlighted</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #171717;
+    --muted: #666a73;
+    --line: #dfe2e8;
+    --line-strong: #bdc3cc;
+    --panel: #f7f8fa;
+    --soft: #2f93b8;
+    --soft-bg: #eaf6fa;
+    --proposed: #d9aa16;
+    --proposed-bg: #fff8db;
+    --passed: #4a9b63;
+    --passed-bg: #edf8f0;
+    --revoked: #d05c3c;
+    --revoked-bg: #fff0eb;
+    --nz: #e6008d;
+    --nz-soft: #fff1f9;
+    --focus: #3b66f5;
+    --shadow: 0 12px 35px rgba(20, 26, 38, 0.10);
+    --month-width: 174px;
+    --year-width: 118px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.45;
+  }
+  button, input, select { font: inherit; }
+  a { color: inherit; }
+
+  .page {
+    width: min(100%, 2560px);
+    margin: 0 auto;
+    padding: 36px 32px 56px;
+  }
+
+  .masthead {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: end;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 22px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--nz);
+    margin-bottom: 10px;
+  }
+  .eyebrow::before { content: ""; width: 30px; height: 4px; background: var(--nz); border-radius: 20px; }
+  h1 {
+    margin: 0;
+    font-size: clamp(38px, 5.2vw, 72px);
+    line-height: .98;
+    letter-spacing: -0.045em;
+    max-width: 980px;
+  }
+  .range { color: #71747b; font-weight: 500; }
+  .subtitle {
+    margin: 14px 0 0;
+    color: var(--muted);
+    max-width: 900px;
+    font-size: 16px;
+  }
+  .nz-key {
+    align-self: center;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 2px solid var(--nz);
+    border-radius: 999px;
+    padding: 8px 14px 8px 8px;
+    background: var(--nz-soft);
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 750;
+  }
+  .nz-key b {
+    background: var(--nz);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 999px;
+    letter-spacing: .05em;
+  }
+
+  .controls {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    margin-top: 20px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,.96);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.06);
+    padding: 14px;
+  }
+  .control-grid {
+    display: grid;
+    grid-template-columns: minmax(230px, 1.3fr) minmax(180px, .8fr) auto auto;
+    gap: 10px;
+    align-items: center;
+  }
+  .field {
+    min-height: 42px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: white;
+    padding: 9px 12px;
+    color: var(--ink);
+    outline: none;
+  }
+  .field:focus { border-color: var(--focus); box-shadow: 0 0 0 3px rgba(59,102,245,.16); }
+  .toggle-group, .action-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .toggle, .action {
+    min-height: 42px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 8px 12px;
+    background: white;
+    color: var(--ink);
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .toggle[aria-pressed="true"] { border-color: var(--nz); color: var(--nz); background: var(--nz-soft); }
+  .toggle:focus-visible, .action:focus-visible, .status-filter:focus-visible, .event-card:focus-visible, .source-link:focus-visible, .modal-close:focus-visible {
+    outline: 3px solid rgba(59,102,245,.3);
+    outline-offset: 2px;
+  }
+  .action:hover, .toggle:hover { border-color: #7f8792; }
+  .action.primary { background: var(--ink); color: white; border-color: var(--ink); }
+  .action.primary:hover { background: #333; }
+
+  .filter-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+  .status-filters, .legend { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .status-filter {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: white;
+    padding: 7px 11px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 750;
+    color: #40434a;
+  }
+  .status-filter[aria-pressed="false"] { opacity: .42; text-decoration: line-through; }
+  .dot { width: 10px; height: 10px; border-radius: 3px; flex: 0 0 auto; }
+  .dot.soft { background: var(--soft); }
+  .dot.proposed { background: var(--proposed); }
+  .dot.passed { background: var(--passed); }
+  .dot.revoked { background: var(--revoked); }
+  .legend-note { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
+  .outline-dot { width: 20px; height: 14px; border: 2px solid var(--nz); border-radius: 5px; background: var(--nz-soft); }
+  .result-count { font-size: 12px; font-weight: 800; color: var(--muted); white-space: nowrap; }
+
+  .timeline-shell {
+    margin-top: 22px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    background: white;
+    box-shadow: var(--shadow);
+  }
+  .scroll-hint {
+    padding: 9px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+    background: #fafbfc;
+  }
+  .timeline-scroll {
+    max-height: calc(100vh - 250px);
+    min-height: 620px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-color: #aeb4be #f1f2f5;
+  }
+  .timeline-inner { min-width: calc(var(--year-width) + 12 * var(--month-width)); }
+  .month-header {
+    position: sticky;
+    top: 0;
+    z-index: 15;
+    display: grid;
+    grid-template-columns: var(--year-width) repeat(12, var(--month-width));
+    background: #f3f5f7;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .month-header .corner {
+    position: sticky;
+    left: 0;
+    z-index: 17;
+    background: #f3f5f7;
+    border-right: 1px solid var(--line-strong);
+    padding: 12px 14px;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .month-name {
+    padding: 12px 10px;
+    border-right: 1px solid var(--line);
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #50545c;
+  }
+  .year-row {
+    display: grid;
+    grid-template-columns: var(--year-width) calc(12 * var(--month-width));
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .year-row:last-child { border-bottom: 0; }
+  .year-row.is-hidden { display: none; }
+  .year-label {
+    position: sticky;
+    left: 0;
+    z-index: 8;
+    background: white;
+    border-right: 1px solid var(--line-strong);
+    padding: 18px 14px;
+    box-shadow: 5px 0 10px rgba(255,255,255,.9);
+  }
+  .year-label strong {
+    display: block;
+    font-size: 22px;
+    letter-spacing: -.03em;
+  }
+  .year-label span { display: block; color: var(--muted); font-size: 11px; margin-top: 3px; }
+  .months-grid { display: grid; grid-template-columns: repeat(12, var(--month-width)); }
+  .month-cell {
+    min-height: 144px;
+    padding: 10px 8px 14px;
+    border-right: 1px solid var(--line);
+    background-image: linear-gradient(to bottom, rgba(0,0,0,.017), rgba(0,0,0,0));
+  }
+  .month-cell:last-child { border-right: 0; }
+  .event-card {
+    --status-color: var(--soft);
+    --status-bg: var(--soft-bg);
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0 0 8px;
+    border: 1px solid #d5d9df;
+    border-left: 5px solid var(--status-color);
+    border-radius: 10px;
+    background: white;
+    padding: 10px 9px 9px;
+    cursor: pointer;
+    text-align: left;
+    box-shadow: 0 3px 8px rgba(20,26,38,.07);
+    transition: transform .16s ease, box-shadow .16s ease, opacity .2s ease, filter .2s ease;
+  }
+  .event-card:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(20,26,38,.12); }
+  .event-card.status-soft { --status-color: var(--soft); --status-bg: var(--soft-bg); }
+  .event-card.status-proposed { --status-color: var(--proposed); --status-bg: var(--proposed-bg); }
+  .event-card.status-passed { --status-color: var(--passed); --status-bg: var(--passed-bg); }
+  .event-card.status-revoked { --status-color: var(--revoked); --status-bg: var(--revoked-bg); }
+  .event-card.is-nz {
+    border: 3px solid var(--nz);
+    border-left: 6px solid var(--status-color);
+    background: linear-gradient(135deg, var(--nz-soft) 0%, #fff 72%);
+    box-shadow: 0 0 0 2px rgba(230,0,141,.08), 0 8px 20px rgba(230,0,141,.14);
+  }
+  .timeline-shell.nz-spotlight .event-card:not(.is-nz) { opacity: .58; filter: saturate(.75); }
+  .timeline-shell.nz-spotlight .event-card:not(.is-nz):hover,
+  .timeline-shell.nz-spotlight .event-card:not(.is-nz):focus { opacity: 1; filter: none; }
+  .event-card.is-filtered { display: none; }
+  .event-meta { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 7px; }
+  .date {
+    font-size: 10px;
+    font-weight: 800;
+    color: #555a63;
+    white-space: nowrap;
+  }
+  .status-pill {
+    font-size: 8.5px;
+    line-height: 1;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .045em;
+    color: var(--status-color);
+    background: var(--status-bg);
+    padding: 5px 6px;
+    border-radius: 999px;
+    max-width: 92px;
+    text-align: center;
+  }
+  .nz-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 31px;
+    height: 20px;
+    padding: 0 8px;
+    border-radius: 999px;
+    color: white;
+    background: var(--nz);
+    font-size: 9px;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: .05em;
+    margin-bottom: 7px;
+  }
+  .event-title {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.25;
+    letter-spacing: -.01em;
+    font-weight: 790;
+  }
+  .event-issuer {
+    margin-top: 7px;
+    font-size: 9.5px;
+    color: var(--muted);
+    line-height: 1.25;
+  }
+  .card-footer { margin-top: 9px; display: flex; justify-content: flex-end; }
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #2f4d9b;
+    font-size: 9.5px;
+    font-weight: 800;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .source-link:hover { border-color: currentColor; }
+
+  .empty-state {
+    display: none;
+    padding: 48px 22px;
+    text-align: center;
+    color: var(--muted);
+  }
+  .empty-state.visible { display: block; }
+
+  .method-note {
+    margin: 18px 2px 0;
+    padding: 14px 16px;
+    border-left: 4px solid var(--nz);
+    background: #fafafa;
+    color: #555a63;
+    font-size: 12px;
+  }
+  .method-note strong { color: var(--ink); }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(14,18,25,.55);
+    z-index: 100;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    width: min(680px, 100%);
+    max-height: min(760px, calc(100vh - 40px));
+    overflow: auto;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 25px 80px rgba(0,0,0,.28);
+    padding: 24px;
+    position: relative;
+  }
+  .modal.nz-modal { border: 4px solid var(--nz); }
+  .modal-close {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: white;
+    cursor: pointer;
+    font-size: 21px;
+    line-height: 1;
+  }
+  .modal-kicker { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-right: 52px; }
+  .modal-status {
+    padding: 6px 9px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .modal-status.soft { color: var(--soft); background: var(--soft-bg); }
+  .modal-status.proposed { color: #8c6900; background: var(--proposed-bg); }
+  .modal-status.passed { color: #2d7041; background: var(--passed-bg); }
+  .modal-status.revoked { color: #9b3e28; background: var(--revoked-bg); }
+  .modal-nz { color: white; background: var(--nz); padding: 6px 10px; border-radius: 999px; font-size: 10px; font-weight: 900; }
+  .modal h2 { margin: 16px 48px 8px 0; font-size: clamp(25px, 4vw, 38px); line-height: 1.08; letter-spacing: -.035em; }
+  .modal-date { color: var(--muted); font-weight: 700; }
+  .modal-desc { margin: 20px 0; font-size: 16px; line-height: 1.6; }
+  .modal-grid { display: grid; grid-template-columns: 120px 1fr; gap: 10px 16px; border-top: 1px solid var(--line); padding-top: 16px; font-size: 13px; }
+  .modal-grid dt { color: var(--muted); font-weight: 800; }
+  .modal-grid dd { margin: 0; font-weight: 650; }
+  .modal-source {
+    display: inline-flex;
+    margin-top: 22px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: var(--ink);
+    color: white;
+    text-decoration: none;
+    font-weight: 800;
+  }
+  .modal-source:hover { background: #333; }
+
+  @media (max-width: 1040px) {
+    .page { padding: 24px 18px 40px; }
+    .masthead { grid-template-columns: 1fr; }
+    .nz-key { justify-self: start; }
+    .control-grid { grid-template-columns: 1fr 1fr; }
+    .timeline-scroll { max-height: calc(100vh - 330px); }
+  }
+  @media (max-width: 640px) {
+    .page { padding: 18px 10px 30px; }
+    h1 { font-size: 42px; }
+    .control-grid { grid-template-columns: 1fr; }
+    .controls { border-radius: 12px; }
+    .timeline-shell { border-radius: 12px; }
+    .timeline-scroll { max-height: calc(100vh - 410px); }
+    .modal-grid { grid-template-columns: 1fr; gap: 4px; }
+    .modal-grid dd { margin-bottom: 9px; }
+  }
+
+  @media print {
+    .page { padding: 0; }
+    .controls, .scroll-hint, .modal-backdrop { display: none !important; }
+    .masthead { margin-bottom: 12px; }
+    .timeline-shell { box-shadow: none; overflow: visible; }
+    .timeline-scroll { max-height: none; overflow: visible; }
+    .timeline-inner { transform: scale(.52); transform-origin: top left; width: 192%; }
+    .method-note { break-before: page; }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">Interactive policy map</div>
+      <h1>AI Governance Timeline<br><span class="range">2019—2026</span></h1>
+      <p class="subtitle">Selected international milestones, with Aotearoa New Zealand continuously highlighted. Search, filter, open event details, and follow the external reference attached to every card.</p>
+    </div>
+    <div class="nz-key" aria-label="Aotearoa New Zealand events are highlighted in magenta"><b>NZ</b> Aotearoa New Zealand highlighted</div>
+  </header>
+
+  <section class="controls" aria-label="Timeline controls">
+    <div class="control-grid">
+      <input id="search" class="field" type="search" placeholder="Search events, issuers, or descriptions…" aria-label="Search timeline" />
+      <select id="jurisdiction" class="field" aria-label="Filter by jurisdiction">
+        <option value="all">All jurisdictions</option>
+      </select>
+      <div class="toggle-group">
+        <button id="spotlight" class="toggle" type="button" aria-pressed="true">NZ spotlight</button>
+        <button id="nzOnly" class="toggle" type="button" aria-pressed="false">NZ only</button>
+      </div>
+      <div class="action-group">
+        <button id="reset" class="action" type="button">Reset</button>
+        <button id="print" class="action primary" type="button">Print / save PDF</button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="status-filters" aria-label="Filter by legal status">
+        <button class="status-filter" data-status="soft" type="button" aria-pressed="true"><span class="dot soft"></span>Soft law / guidance</button>
+        <button class="status-filter" data-status="proposed" type="button" aria-pressed="true"><span class="dot proposed"></span>Hard law proposed</button>
+        <button class="status-filter" data-status="passed" type="button" aria-pressed="true"><span class="dot passed"></span>Hard law passed / in force</button>
+        <button class="status-filter" data-status="revoked" type="button" aria-pressed="true"><span class="dot revoked"></span>Hard law revoked / withdrawn</button>
+      </div>
+      <div class="legend">
+        <span class="legend-note"><span class="outline-dot"></span>Magenta outline = New Zealand</span>
+        <span id="resultCount" class="result-count" aria-live="polite"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="timelineShell" class="timeline-shell nz-spotlight" aria-label="AI governance timeline">
+    <div class="scroll-hint">Scroll horizontally for months and vertically for years. Select a card for details; use “Source ↗” to open its external reference.</div>
+    <div id="timelineScroll" class="timeline-scroll">
+      <div class="timeline-inner">
+        <div class="month-header" aria-hidden="true">
+          <div class="corner">Year</div>
+          <div class="month-name">Jan</div><div class="month-name">Feb</div><div class="month-name">Mar</div><div class="month-name">Apr</div>
+          <div class="month-name">May</div><div class="month-name">Jun</div><div class="month-name">Jul</div><div class="month-name">Aug</div>
+          <div class="month-name">Sep</div><div class="month-name">Oct</div><div class="month-name">Nov</div><div class="month-name">Dec</div>
+        </div>
+        <div id="timelineRows"></div>
+        <div id="emptyState" class="empty-state"><strong>No events match the current filters.</strong><br />Try resetting the search or enabling another status.</div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="method-note">
+    <strong>Scope and method.</strong> This is a redesigned, independent interactive timeline based on the supplied figure. Dates and legal-status labels are standardized to the referenced publication, adoption, issuance, entry-into-force, or withdrawal milestone. “Soft law / guidance” also includes institutional initiatives and voluntary frameworks. The selection is illustrative rather than exhaustive. Last verified 30 September 2026.
+  </aside>
+</main>
+
+<div id="modalBackdrop" class="modal-backdrop" role="presentation">
+  <section id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button id="modalClose" class="modal-close" type="button" aria-label="Close details">×</button>
+    <div id="modalKicker" class="modal-kicker"></div>
+    <h2 id="modalTitle"></h2>
+    <div id="modalDate" class="modal-date"></div>
+    <p id="modalDesc" class="modal-desc"></p>
+    <dl class="modal-grid">
+      <dt>Jurisdiction</dt><dd id="modalJurisdiction"></dd>
+      <dt>Issuer</dt><dd id="modalIssuer"></dd>
+      <dt>Legal-status category</dt><dd id="modalStatusText"></dd>
+    </dl>
+    <a id="modalSource" class="modal-source" href="#" target="_blank" rel="noopener noreferrer">Open external reference ↗</a>
+  </section>
+</div>
+
+<script>
+const EVENTS = [{"date": "2019-02-11", "dateLabel": "11 Feb 2019", "title": "Maintaining American Leadership in Artificial Intelligence", "jurisdiction": "United States", "issuer": "White House — Executive Order 13859", "status": "passed", "nz": false, "description": "Executive Order 13859 established a coordinated federal strategy for artificial intelligence research, development, standards, workforce preparation, and international engagement.", "url": "https://www.federalregister.gov/documents/2019/02/14/2019-02544/maintaining-american-leadership-in-artificial-intelligence", "id": "event-001", "year": 2019, "month": 2}, {"date": "2019-04-01", "dateLabel": "1 Apr 2019", "title": "Directive on Automated Decision-Making", "jurisdiction": "Canada", "issuer": "Treasury Board of Canada Secretariat", "status": "soft", "nz": false, "description": "The directive introduced impact assessment, transparency, quality assurance, recourse, and reporting requirements for automated decision systems used by federal departments.", "url": "https://www.tbs-sct.canada.ca/pol/doc-eng.aspx?id=32592", "id": "event-002", "year": 2019, "month": 4}, {"date": "2019-04-08", "dateLabel": "8 Apr 2019", "title": "Ethics Guidelines for Trustworthy AI", "jurisdiction": "European Union", "issuer": "European Commission High-Level Expert Group", "status": "soft", "nz": false, "description": "The guidelines framed trustworthy AI around lawful, ethical, and robust development and set out seven operational requirements.", "url": "https://digital-strategy.ec.europa.eu/en/library/ethics-guidelines-trustworthy-ai", "id": "event-003", "year": 2019, "month": 4}, {"date": "2019-05-22", "dateLabel": "22 May 2019", "title": "OECD AI Principles", "jurisdiction": "Global / OECD", "issuer": "Organisation for Economic Co-operation and Development", "status": "soft", "nz": false, "description": "The OECD adopted intergovernmental principles for innovative and trustworthy AI, including transparency, robustness, accountability, and human-centred values.", "url": "https://oecd.ai/en/ai-principles", "id": "event-004", "year": 2019, "month": 5}, {"date": "2019-09-16", "dateLabel": "Sep 2019", "title": "Principles for the Use of Artificial Intelligence — PL 5051/2019", "jurisdiction": "Brazil", "issuer": "Federal Senate of Brazil", "status": "proposed", "nz": false, "description": "The bill proposed national principles for artificial intelligence use and became part of Brazil’s evolving legislative debate over an AI legal framework.", "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/138790", "id": "event-005", "year": 2019, "month": 9}, {"date": "2020-02-04", "dateLabel": "4 Feb 2020", "title": "Artificial Intelligence Bill — PL 21/2020", "jurisdiction": "Brazil", "issuer": "Chamber of Deputies", "status": "proposed", "nz": false, "description": "The proposal sought to establish principles, rights, duties, and governance guidelines for the development and application of AI in Brazil.", "url": "https://www.camara.leg.br/noticias/641927-projeto-cria-marco-legal-para-uso-de-inteligencia-artificial-no-brasil/", "id": "event-006", "year": 2020, "month": 2}, {"date": "2020-02-27", "dateLabel": "Feb 2020", "title": "OECD AI Policy Observatory Launch", "jurisdiction": "Global / OECD", "issuer": "OECD.AI", "status": "soft", "nz": false, "description": "The OECD launched a platform for comparable AI policy evidence, national initiatives, metrics, and practical implementation resources.", "url": "https://oecd.ai/en/about/background", "id": "event-007", "year": 2020, "month": 2}, {"date": "2020-06-11", "dateLabel": "11 Jun 2020", "title": "Roadmap for Digital Cooperation", "jurisdiction": "Global / UN", "issuer": "United Nations", "status": "soft", "nz": false, "description": "The UN roadmap set out priorities for digital cooperation, including human-centred AI, digital trust and security, and global governance coordination.", "url": "https://www.un.org/digital-emerging-technologies/content/roadmap-digital-cooperation", "id": "event-008", "year": 2020, "month": 6}, {"date": "2020-06-15", "dateLabel": "Jun 2020", "title": "Global Partnership on Artificial Intelligence Launch", "jurisdiction": "Global / GPAI", "issuer": "Global Partnership on Artificial Intelligence", "status": "soft", "nz": false, "description": "GPAI was launched as a multistakeholder initiative to bridge AI theory and practice through international research and policy collaboration.", "url": "https://oecd.ai/en/about/about-gpai", "id": "event-009", "year": 2020, "month": 6}, {"date": "2020-07-27", "dateLabel": "Jul 2020", "title": "Algorithm Charter for Aotearoa New Zealand", "jurisdiction": "Aotearoa New Zealand", "issuer": "Government Chief Data Steward / Stats NZ", "status": "soft", "nz": true, "description": "The voluntary charter asks signatory agencies to improve transparency, explainability, human oversight, data fitness, privacy, and review for higher-risk public-sector algorithms.", "url": "https://www.data.govt.nz/toolkit/data-ethics/government-algorithm-transparency-and-accountability/algorithm-charter", "id": "event-010", "year": 2020, "month": 7}, {"date": "2020-12-03", "dateLabel": "3 Dec 2020", "title": "Promoting the Use of Trustworthy AI in the Federal Government", "jurisdiction": "United States", "issuer": "White House — Executive Order 13960", "status": "passed", "nz": false, "description": "The order established principles for lawful, purposeful, accurate, reliable, safe, understandable, responsible, traceable, and regularly monitored federal AI use.", "url": "https://www.federalregister.gov/documents/2020/12/08/2020-27065/promoting-the-use-of-trustworthy-artificial-intelligence-in-the-federal-government", "id": "event-011", "year": 2020, "month": 12}, {"date": "2021-04-21", "dateLabel": "21 Apr 2021", "title": "Artificial Intelligence Act Proposal", "jurisdiction": "European Union", "issuer": "European Commission", "status": "proposed", "nz": false, "description": "The Commission proposed a horizontal, risk-based legal framework for AI systems, including obligations for high-risk uses and prohibitions on selected practices.", "url": "https://digital-strategy.ec.europa.eu/en/library/proposal-regulation-laying-down-harmonised-rules-artificial-intelligence", "id": "event-012", "year": 2021, "month": 4}, {"date": "2021-09-25", "dateLabel": "Sep 2021", "title": "Ethical Norms for New Generation Artificial Intelligence", "jurisdiction": "China", "issuer": "National New Generation AI Governance Expert Committee", "status": "soft", "nz": false, "description": "The norms articulated ethical expectations for AI management, research, supply, and use, including fairness, privacy, controllability, and accountability.", "url": "https://digichina.stanford.edu/work/translation-ethical-norms-for-new-generation-artificial-intelligence-released/", "id": "event-013", "year": 2021, "month": 9}, {"date": "2021-11-23", "dateLabel": "23 Nov 2021", "title": "Recommendation on the Ethics of Artificial Intelligence", "jurisdiction": "Global / UNESCO", "issuer": "UNESCO", "status": "soft", "nz": false, "description": "UNESCO member states adopted a global normative instrument covering human rights, transparency, accountability, data governance, environmental impacts, and oversight.", "url": "https://www.unesco.org/en/legal-affairs/recommendation-ethics-artificial-intelligence", "id": "event-014", "year": 2021, "month": 11}, {"date": "2021-12-31", "dateLabel": "31 Dec 2021", "title": "Algorithmic Recommendation Management Provisions", "jurisdiction": "China", "issuer": "Cyberspace Administration of China and partner ministries", "status": "passed", "nz": false, "description": "The provisions regulate recommendation algorithms used by online information services and include disclosure, user-choice, filing, and content-governance duties.", "url": "https://www.chinalawtranslate.com/en/algorithms/", "id": "event-015", "year": 2021, "month": 12}, {"date": "2022-03-30", "dateLabel": "Mar 2022", "title": "Commission of Legal Experts for Artificial Intelligence — CJSUBIA", "jurisdiction": "Brazil", "issuer": "Federal Senate of Brazil", "status": "soft", "nz": false, "description": "The Senate commission consolidated technical and legal evidence to support a comprehensive Brazilian AI framework proposal.", "url": "https://legis.senado.leg.br/atividade/comissoes/comissao/2504/", "id": "event-016", "year": 2022, "month": 3}, {"date": "2022-04-20", "dateLabel": "Apr 2022", "title": "European Parliament Work on the AI Act", "jurisdiction": "European Union", "issuer": "European Parliament", "status": "proposed", "nz": false, "description": "Parliamentary committees advanced amendments and negotiations on the Commission’s proposed risk-based AI regulation.", "url": "https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2021)698792", "id": "event-017", "year": 2022, "month": 4}, {"date": "2022-06-16", "dateLabel": "16 Jun 2022", "title": "Artificial Intelligence and Data Act Introduced", "jurisdiction": "Canada", "issuer": "Innovation, Science and Economic Development Canada", "status": "proposed", "nz": false, "description": "AIDA was introduced within Bill C-27 to regulate high-impact AI systems and prohibit selected harmful data and AI practices.", "url": "https://ised-isde.canada.ca/site/innovation-better-canada/en/artificial-intelligence-and-data-act-aida", "id": "event-018", "year": 2022, "month": 6}, {"date": "2022-06-17", "dateLabel": "Jun 2022", "title": "Office of the UN Secretary-General’s Envoy on Technology", "jurisdiction": "Global / UN", "issuer": "United Nations", "status": "soft", "nz": false, "description": "The office was established to coordinate digital cooperation and support international policy work on emerging technologies, including AI governance.", "url": "https://www.un.org/techenvoy/content/office-tech-envoy", "id": "event-019", "year": 2022, "month": 6}, {"date": "2022-09-28", "dateLabel": "28 Sep 2022", "title": "AI Liability Directive Proposal", "jurisdiction": "European Union", "issuer": "European Commission", "status": "proposed", "nz": false, "description": "The proposed directive sought to adapt non-contractual civil-liability rules by easing proof in claims involving damage caused by AI systems.", "url": "https://commission.europa.eu/business-economy-euro/doing-business-eu/contract-rules/digital-contracts/liability-rules-artificial-intelligence_en", "id": "event-020", "year": 2022, "month": 9}, {"date": "2022-10-04", "dateLabel": "4 Oct 2022", "title": "Blueprint for an AI Bill of Rights", "jurisdiction": "United States", "issuer": "White House Office of Science and Technology Policy", "status": "soft", "nz": false, "description": "The blueprint outlined five principles: safe and effective systems, protection from algorithmic discrimination, data privacy, notice and explanation, and human alternatives.", "url": "https://bidenwhitehouse.archives.gov/ostp/ai-bill-of-rights/", "id": "event-021", "year": 2022, "month": 10}, {"date": "2022-11-25", "dateLabel": "25 Nov 2022", "title": "Deep Synthesis Internet Information Service Provisions", "jurisdiction": "China", "issuer": "Cyberspace Administration of China and partner ministries", "status": "passed", "nz": false, "description": "The rules regulate synthetically generated or altered online content and require governance measures, security assessments, and content labelling in relevant settings.", "url": "https://www.chinalawtranslate.com/en/deep-synthesis/", "id": "event-022", "year": 2022, "month": 11}, {"date": "2022-12-06", "dateLabel": "6 Dec 2022", "title": "Brazilian AI Experts Commission Final Report", "jurisdiction": "Brazil", "issuer": "Federal Senate of Brazil", "status": "soft", "nz": false, "description": "The commission delivered a final report and draft framework that informed the subsequent PL 2338/2023 proposal.", "url": "https://www12.senado.leg.br/noticias/materias/2022/12/06/pacheco-recebe-relatorio-da-comissao-de-juristas-sobre-inteligencia-artificial", "id": "event-023", "year": 2022, "month": 12}, {"date": "2023-01-26", "dateLabel": "26 Jan 2023", "title": "AI Risk Management Framework 1.0", "jurisdiction": "United States", "issuer": "National Institute of Standards and Technology", "status": "soft", "nz": false, "description": "NIST released a voluntary framework for mapping, measuring, managing, and governing AI risks across the system lifecycle.", "url": "https://www.nist.gov/itl/ai-risk-management-framework", "id": "event-024", "year": 2023, "month": 1}, {"date": "2023-03-13", "dateLabel": "Mar 2023", "title": "AIDA Companion Document", "jurisdiction": "Canada", "issuer": "Innovation, Science and Economic Development Canada", "status": "soft", "nz": false, "description": "The companion document explained the intended scope, risk approach, obligations, oversight, and enforcement model of the proposed AIDA legislation.", "url": "https://ised-isde.canada.ca/site/innovation-better-canada/en/artificial-intelligence-and-data-act-aida-companion-document", "id": "event-025", "year": 2023, "month": 3}, {"date": "2023-03-29", "dateLabel": "29 Mar 2023", "title": "A Pro-Innovation Approach to AI Regulation", "jurisdiction": "United Kingdom", "issuer": "UK Government", "status": "soft", "nz": false, "description": "The white paper proposed cross-sector principles to be implemented by existing regulators rather than a single AI-specific regulator or statute.", "url": "https://www.gov.uk/government/publications/ai-regulation-a-pro-innovation-approach", "id": "event-026", "year": 2023, "month": 3}, {"date": "2023-04-11", "dateLabel": "11 Apr 2023", "title": "Draft Interim Measures for Generative AI Services", "jurisdiction": "China", "issuer": "Cyberspace Administration of China", "status": "proposed", "nz": false, "description": "The draft proposed obligations for providers of public-facing generative AI services, including data, content, security, and user-protection requirements.", "url": "http://www.cac.gov.cn/2023-04/11/c_1682854275475410.htm", "id": "event-027", "year": 2023, "month": 4}, {"date": "2023-05-03", "dateLabel": "3 May 2023", "title": "Artificial Intelligence Bill — PL 2338/2023", "jurisdiction": "Brazil", "issuer": "Federal Senate of Brazil", "status": "proposed", "nz": false, "description": "The proposal established a rights- and risk-based framework for AI, drawing on the Senate experts commission’s work.", "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/157233", "id": "event-028", "year": 2023, "month": 5}, {"date": "2023-07-01", "dateLabel": "Jul 2023", "title": "Interim Generative AI Guidance for the Public Service", "jurisdiction": "Aotearoa New Zealand", "issuer": "Government Chief Digital Officer", "status": "soft", "nz": true, "description": "Interim guidance helped New Zealand public-service agencies assess and manage privacy, security, information, legal, ethical, and operational risks from generative AI.", "url": "https://www.digital.govt.nz/standards-and-guidance/technology-and-architecture/artificial-intelligence/responsible-ai-guidance-for-the-public-service-genai/overview", "id": "event-029", "year": 2023, "month": 7}, {"date": "2023-07-13", "dateLabel": "13 Jul 2023", "title": "Interim Measures for Generative AI Service Management", "jurisdiction": "China", "issuer": "Cyberspace Administration of China and partner ministries", "status": "passed", "nz": false, "description": "The final interim measures established rules for public generative-AI services and took effect in August 2023.", "url": "https://www.chinalawtranslate.com/en/generative-ai-interim/", "id": "event-030", "year": 2023, "month": 7}, {"date": "2023-09-06", "dateLabel": "Sep 2023", "title": "Guide on the Use of Generative AI in the Public Service", "jurisdiction": "Canada", "issuer": "Government of Canada", "status": "soft", "nz": false, "description": "The guide set out responsible-use expectations for federal institutions using generative AI, including transparency, validation, privacy, security, and human oversight.", "url": "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/responsible-use-ai/guide-use-generative-ai.html", "id": "event-031", "year": 2023, "month": 9}, {"date": "2023-09-27", "dateLabel": "27 Sep 2023", "title": "Voluntary Code of Conduct for Advanced Generative AI Systems", "jurisdiction": "Canada", "issuer": "Innovation, Science and Economic Development Canada", "status": "soft", "nz": false, "description": "The voluntary code articulated measures for accountability, safety, fairness, transparency, human oversight, and robustness for advanced generative AI.", "url": "https://ised-isde.canada.ca/site/ised/en/voluntary-code-conduct-responsible-development-and-management-advanced-generative-ai-systems", "id": "event-032", "year": 2023, "month": 9}, {"date": "2023-10-26", "dateLabel": "26 Oct 2023", "title": "High-Level Advisory Body on Artificial Intelligence", "jurisdiction": "Global / UN", "issuer": "United Nations", "status": "soft", "nz": false, "description": "The UN launched a multistakeholder body to analyze options for international AI governance and strengthen global coordination.", "url": "https://www.un.org/en/ai-advisory-body", "id": "event-033", "year": 2023, "month": 10}, {"date": "2023-10-30", "dateLabel": "30 Oct 2023", "title": "Safe, Secure, and Trustworthy Development and Use of AI", "jurisdiction": "United States", "issuer": "White House — Executive Order 14110", "status": "passed", "nz": false, "description": "The order directed broad federal action on AI safety testing, critical infrastructure, privacy, civil rights, consumer protection, workforce impacts, innovation, and government use.", "url": "https://www.federalregister.gov/documents/2023/11/01/2023-24283/safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence", "id": "event-034", "year": 2023, "month": 10}, {"date": "2023-11-01", "dateLabel": "1 Nov 2023", "title": "Bletchley Declaration on AI Safety", "jurisdiction": "Global / United Kingdom", "issuer": "AI Safety Summit participants", "status": "soft", "nz": false, "description": "Participating governments recognized shared risks from frontier AI and the need for inclusive international cooperation, scientific understanding, and risk-based policy.", "url": "https://www.gov.uk/government/publications/ai-safety-summit-2023-the-bletchley-declaration", "id": "event-035", "year": 2023, "month": 11}, {"date": "2023-11-01", "dateLabel": "Nov 2023", "title": "United States AI Safety Institute Launch", "jurisdiction": "United States", "issuer": "National Institute of Standards and Technology", "status": "soft", "nz": false, "description": "NIST established the U.S. AI Safety Institute to advance measurement science, evaluations, standards, and collaboration for advanced AI safety.", "url": "https://www.nist.gov/news-events/news/2023/11/nist-seeks-collaborators-consortium-supporting-artificial-intelligence", "id": "event-036", "year": 2023, "month": 11}, {"date": "2023-11-02", "dateLabel": "2 Nov 2023", "title": "United Kingdom AI Safety Institute Launch", "jurisdiction": "United Kingdom", "issuer": "UK Government", "status": "soft", "nz": false, "description": "The UK launched a government institute focused on empirical evaluation and research concerning risks from advanced AI systems.", "url": "https://www.gov.uk/government/news/prime-minister-launches-new-ai-safety-institute", "id": "event-037", "year": 2023, "month": 11}, {"date": "2023-12-09", "dateLabel": "9 Dec 2023", "title": "Provisional Agreement on the EU AI Act", "jurisdiction": "European Union", "issuer": "Council of the EU and European Parliament", "status": "proposed", "nz": false, "description": "Negotiators reached a provisional political agreement on the first comprehensive cross-sector AI regulation.", "url": "https://www.consilium.europa.eu/en/press/press-releases/2023/12/09/artificial-intelligence-act-council-and-parliament-strike-a-deal-on-the-first-worldwide-rules-for-ai/", "id": "event-038", "year": 2023, "month": 12}, {"date": "2024-02-21", "dateLabel": "Feb 2024", "title": "European AI Office Established", "jurisdiction": "European Union", "issuer": "European Commission", "status": "soft", "nz": false, "description": "The Commission established the AI Office to support implementation and enforcement of the AI Act, particularly for general-purpose AI models.", "url": "https://digital-strategy.ec.europa.eu/en/policies/ai-office", "id": "event-039", "year": 2024, "month": 2}, {"date": "2024-05-03", "dateLabel": "May 2024", "title": "OECD AI Principles Updated", "jurisdiction": "Global / OECD", "issuer": "OECD", "status": "soft", "nz": false, "description": "The OECD updated its principles to address developments including general-purpose and generative AI while retaining a human-centred, trustworthy-AI foundation.", "url": "https://oecd.ai/en/ai-principles", "id": "event-040", "year": 2024, "month": 5}, {"date": "2024-07-12", "dateLabel": "12 Jul 2024", "title": "EU Artificial Intelligence Act Published", "jurisdiction": "European Union", "issuer": "European Union", "status": "passed", "nz": false, "description": "Regulation (EU) 2024/1689 was published in the Official Journal, creating binding, phased requirements based on AI-system risk and model capability.", "url": "https://eur-lex.europa.eu/eli/reg/2024/1689/oj", "id": "event-041", "year": 2024, "month": 7}, {"date": "2024-07-25", "dateLabel": "25 Jul 2024", "title": "Cabinet Strategic Approach to AI and Endorsement of OECD Principles", "jurisdiction": "Aotearoa New Zealand", "issuer": "New Zealand Cabinet / MBIE", "status": "soft", "nz": true, "description": "Cabinet agreed to a strategic approach to AI policy work and endorsed the OECD AI Principles as a foundation for New Zealand’s approach.", "url": "https://www.mbie.govt.nz/business-and-employment/business/support-for-business/responsible-ai-guidance-for-businesses/other-ai-guidance-and-resources", "id": "event-042", "year": 2024, "month": 7}, {"date": "2024-11-21", "dateLabel": "Nov 2024", "title": "International Network of AI Safety Institutes Launch", "jurisdiction": "Global", "issuer": "Participating governments and AI safety institutes", "status": "soft", "nz": false, "description": "An international network was launched to strengthen technical cooperation, testing, measurement, and scientific alignment among national AI safety institutes.", "url": "https://www.commerce.gov/news/press-releases/2024/11/us-department-commerce-convenes-international-network-ai-safety", "id": "event-043", "year": 2024, "month": 11}, {"date": "2024-12-10", "dateLabel": "10 Dec 2024", "title": "Senate Approval of Revised AI Framework — PL 2338/2023", "jurisdiction": "Brazil", "issuer": "Federal Senate of Brazil", "status": "proposed", "nz": false, "description": "Brazil’s Senate approved a revised AI framework bill; further legislative steps remained necessary before enactment.", "url": "https://www25.senado.leg.br/web/atividade/materias/-/materia/157233", "id": "event-044", "year": 2024, "month": 12}, {"date": "2024-12-18", "dateLabel": "18 Dec 2024", "title": "Draft Biometric Processing Privacy Code Consultation", "jurisdiction": "Aotearoa New Zealand", "issuer": "Office of the Privacy Commissioner", "status": "proposed", "nz": true, "description": "The Privacy Commissioner opened consultation on a draft code proposing proportionality, stronger notice and transparency, safeguards, and limits on selected biometric uses.", "url": "https://www.privacy.org.nz/tuhono-connect/statements-media-releases/privacy-commissioner-announces-intent-to-issue-biometrics-code/", "id": "event-045", "year": 2024, "month": 12}, {"date": "2024-12-26", "dateLabel": "26 Dec 2024", "title": "AI Basic Act Passed", "jurisdiction": "South Korea", "issuer": "National Assembly of the Republic of Korea", "status": "passed", "nz": false, "description": "South Korea passed a comprehensive AI framework act addressing national planning, high-impact AI, transparency, safety, and support for innovation.", "url": "https://www.trade.gov/market-intelligence/south-korea-artificial-intelligence-ai-basic-act", "id": "event-046", "year": 2024, "month": 12}, {"date": "2025-01-20", "dateLabel": "20 Jan 2025", "title": "Executive Order 14110 Rescinded", "jurisdiction": "United States", "issuer": "White House — Executive Order 14148", "status": "revoked", "nz": false, "description": "Executive Order 14148 rescinded a group of prior executive actions, including the 2023 executive order on safe, secure, and trustworthy AI.", "url": "https://www.federalregister.gov/documents/2025/01/28/2025-01901/initial-rescissions-of-harmful-executive-orders-and-actions", "id": "event-047", "year": 2025, "month": 1}, {"date": "2025-01-23", "dateLabel": "23 Jan 2025", "title": "Removing Barriers to American Leadership in Artificial Intelligence", "jurisdiction": "United States", "issuer": "White House — Executive Order 14179", "status": "passed", "nz": false, "description": "The order established a federal policy focused on sustaining U.S. AI leadership and directed development of an AI action plan and review of prior policies.", "url": "https://www.federalregister.gov/documents/2025/01/31/2025-02172/removing-barriers-to-american-leadership-in-artificial-intelligence", "id": "event-048", "year": 2025, "month": 1}, {"date": "2025-02-02", "dateLabel": "2 Feb 2025", "title": "EU AI Act Prohibited-Practice and AI-Literacy Rules Begin", "jurisdiction": "European Union", "issuer": "European Union", "status": "passed", "nz": false, "description": "The first substantive phase of the EU AI Act began applying, including prohibited AI practices and obligations relating to AI literacy.", "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", "id": "event-049", "year": 2025, "month": 2}, {"date": "2025-02-03", "dateLabel": "3 Feb 2025", "title": "Public Service AI Framework and Updated Responsible-AI Guidance", "jurisdiction": "Aotearoa New Zealand", "issuer": "Government Chief Digital Officer", "status": "soft", "nz": true, "description": "New Zealand released a non-binding whole-of-public-service AI framework and expanded its 2023 interim generative-AI guidance with practical expectations for safe, transparent, and responsible use.", "url": "https://www.digital.govt.nz/standards-and-guidance/technology-and-architecture/artificial-intelligence/public-service-artificial-intelligence-framework", "id": "event-050", "year": 2025, "month": 2}, {"date": "2025-02-10", "dateLabel": "10–11 Feb 2025", "title": "Paris AI Action Summit", "jurisdiction": "Global / France", "issuer": "Government of France and international participants", "status": "soft", "nz": false, "description": "The summit convened governments, international organisations, civil society, research, and industry around inclusive, sustainable, and public-interest AI action.", "url": "https://www.elysee.fr/en/sommet-pour-l-action-sur-l-ia", "id": "event-051", "year": 2025, "month": 2}, {"date": "2025-02-11", "dateLabel": "Feb 2025", "title": "AI Liability Directive Proposal Marked for Withdrawal", "jurisdiction": "European Union", "issuer": "European Commission", "status": "revoked", "nz": false, "description": "The Commission’s 2025 work programme listed the proposed AI Liability Directive for withdrawal, ending that legislative route unless replaced by future action.", "url": "https://commission.europa.eu/strategy-and-policy/strategy-documents/commission-work-programme/commission-work-programme-2025_en", "id": "event-052", "year": 2025, "month": 2}, {"date": "2025-02-14", "dateLabel": "14 Feb 2025", "title": "UK AI Safety Institute Renamed AI Security Institute", "jurisdiction": "United Kingdom", "issuer": "UK Government", "status": "soft", "nz": false, "description": "The institute was renamed and its stated focus sharpened around serious AI risks and national security-relevant technical research and evaluation.", "url": "https://www.gov.uk/government/news/tackling-ai-security-risks-to-unleash-growth-and-deliver-plan-for-change", "id": "event-053", "year": 2025, "month": 2}, {"date": "2025-04-23", "dateLabel": "23 Apr 2025", "title": "Advancing Artificial Intelligence Education for American Youth", "jurisdiction": "United States", "issuer": "White House — Executive Order 14277", "status": "passed", "nz": false, "description": "The order directed federal coordination to expand AI literacy, educator support, apprenticeships, research opportunities, and youth-focused AI education.", "url": "https://www.federalregister.gov/documents/2025/04/30/2025-07705/advancing-artificial-intelligence-education-for-american-youth", "id": "event-054", "year": 2025, "month": 4}, {"date": "2025-06-30", "dateLabel": "30 Jun 2025", "title": "Public-Service AI Expert Advisory Panel Appointed", "jurisdiction": "Aotearoa New Zealand", "issuer": "Government Chief Digital Officer", "status": "soft", "nz": true, "description": "The GCDO appointed an expert panel to advise on system leadership, standards, stewardship, and responsible uptake of AI across the public service.", "url": "https://www.digital.govt.nz/news/government-chief-digital-officer-appoints-ai-expert-advisory-panel-to-guide-responsible-ai-use-in-public-service", "id": "event-055", "year": 2025, "month": 6}, {"date": "2025-07-08", "dateLabel": "8 Jul 2025", "title": "National AI Strategy and Responsible-AI Guidance for Businesses", "jurisdiction": "Aotearoa New Zealand", "issuer": "Ministry of Business, Innovation and Employment", "status": "soft", "nz": true, "description": "New Zealand launched its first national AI strategy, focused on adoption and investment, together with voluntary responsible-AI guidance for businesses.", "url": "https://www.mbie.govt.nz/about/news/artificial-intelligence-strategy-and-business-guidance-now-available", "id": "event-056", "year": 2025, "month": 7}, {"date": "2025-07-21", "dateLabel": "21 Jul 2025", "title": "Biometric Processing Privacy Code Issued", "jurisdiction": "Aotearoa New Zealand", "issuer": "Office of the Privacy Commissioner", "status": "passed", "nz": true, "description": "The Privacy Commissioner issued a legally binding code under the Privacy Act for organisations using biometric information in automated processing.", "url": "https://www.privacy.org.nz/privacy-principles/codes-of-practice/biometric-processing-privacy-code/", "id": "event-057", "year": 2025, "month": 7}, {"date": "2025-07-23", "dateLabel": "23 Jul 2025", "title": "America’s AI Action Plan", "jurisdiction": "United States", "issuer": "White House", "status": "soft", "nz": false, "description": "The federal action plan organised policy proposals around AI innovation, infrastructure, and international leadership and security.", "url": "https://www.whitehouse.gov/articles/2025/07/white-house-unveils-americas-ai-action-plan/", "id": "event-058", "year": 2025, "month": 7}, {"date": "2025-08-02", "dateLabel": "2 Aug 2025", "title": "EU General-Purpose AI Obligations Begin", "jurisdiction": "European Union", "issuer": "European Union", "status": "passed", "nz": false, "description": "The AI Act’s obligations for providers of general-purpose AI models began applying under the regulation’s phased implementation schedule.", "url": "https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai", "id": "event-059", "year": 2025, "month": 8}, {"date": "2025-11-03", "dateLabel": "3 Nov 2025", "title": "Biometric Processing Privacy Code Comes into Force", "jurisdiction": "Aotearoa New Zealand", "issuer": "Office of the Privacy Commissioner", "status": "passed", "nz": true, "description": "The legally binding biometric privacy code came into force; organisations already using biometrics received a transition period to align with the new rules.", "url": "https://www.privacy.org.nz/tuhono-connect/statements-media-releases/privacy-commissioner-announces-new-rules-for-biometrics/", "id": "event-060", "year": 2025, "month": 11}, {"date": "2026-01-22", "dateLabel": "22 Jan 2026", "title": "South Korea AI Basic Act Takes Effect", "jurisdiction": "South Korea", "issuer": "Republic of Korea", "status": "passed", "nz": false, "description": "The framework act and its enforcement decree took effect, including governance, high-impact AI, disclosure, safety, and risk-management provisions.", "url": "https://www.loc.gov/item/global-legal-monitor/2026-02-20/south-korea-comprehensive-ai-legal-framework-takes-effect/", "id": "event-061", "year": 2026, "month": 1}, {"date": "2026-03-20", "dateLabel": "Mar 2026", "title": "Biometric Processing Privacy Code Amendment No. 1 Issued", "jurisdiction": "Aotearoa New Zealand", "issuer": "Office of the Privacy Commissioner", "status": "passed", "nz": true, "description": "The Privacy Commissioner amended the biometric code to reflect the new Information Privacy Principle 3A introduced by the Privacy Amendment Act 2025.", "url": "https://www.privacy.org.nz/privacy-principles/codes-of-practice/biometric-processing-privacy-code/", "id": "event-062", "year": 2026, "month": 3}, {"date": "2026-05-01", "dateLabel": "1 May 2026", "title": "IPP3A and Consolidated Biometric-Code Changes Take Effect", "jurisdiction": "Aotearoa New Zealand", "issuer": "Office of the Privacy Commissioner", "status": "passed", "nz": true, "description": "Information Privacy Principle 3A and the related consolidated biometric-code amendments took effect, updating notice obligations around indirect collection of personal information.", "url": "https://www.privacy.org.nz/privacy-principles/codes-of-practice/biometric-processing-privacy-code/", "id": "event-063", "year": 2026, "month": 5}, {"date": "2026-08-02", "dateLabel": "2 Aug 2026", "title": "EU AI Act Enforcement and Article 50 Transparency Rules Begin", "jurisdiction": "European Union", "issuer": "European Commission and national authorities", "status": "passed", "nz": false, "description": "The Commission and national authorities began enforcing applicable AI Act rules, while transparency duties started for AI interaction, deepfakes, and selected generated or altered content.", "url": "https://digital-strategy.ec.europa.eu/en/news/commission-starts-enforcing-ai-act-rules-and-new-transparency-requirements-2-august", "id": "event-064", "year": 2026, "month": 8}, {"date": "2026-08-03", "dateLabel": "3 Aug 2026", "title": "Biometric-Code Transition Period Ends for Existing Users", "jurisdiction": "Aotearoa New Zealand", "issuer": "Office of the Privacy Commissioner", "status": "passed", "nz": true, "description": "The transition period ended for organisations already using biometric processing, bringing existing deployments fully under the code’s compliance expectations.", "url": "https://www.privacy.org.nz/privacy-principles/codes-of-practice/biometric-processing-privacy-code/", "id": "event-065", "year": 2026, "month": 8}, {"date": "2026-08-14", "dateLabel": "14 Aug 2026", "title": "Consultation on International Technology and AI Standards Opens", "jurisdiction": "Aotearoa New Zealand", "issuer": "Standards New Zealand", "status": "soft", "nz": true, "description": "Standards New Zealand opened consultation on more than 60 international technology standards, including AI standards addressing risk, transparency, and trust.", "url": "https://www.standards.govt.nz/news-and-updates/help-shape-the-future-of-technology-standards-in-new-zealand", "id": "event-066", "year": 2026, "month": 8}, {"date": "2026-08-18", "dateLabel": "18 Aug 2026", "title": "Public-Service AI Development Series Launch", "jurisdiction": "Aotearoa New Zealand", "issuer": "Leadership Development Centre and GDDA", "status": "soft", "nz": true, "description": "A self-paced learning series was released to help public servants understand and use AI safely, responsibly, and effectively.", "url": "https://www.digital.govt.nz/news/new-ai-training-supports-safe-and-practical-use-across-the-public-service", "id": "event-067", "year": 2026, "month": 8}, {"date": "2026-08-19", "dateLabel": "19 Aug 2026", "title": "2026 Cross-Agency AI Survey Published", "jurisdiction": "Aotearoa New Zealand", "issuer": "Government Digital Delivery Agency", "status": "soft", "nz": true, "description": "The survey reported 545 AI use cases across 59 government organisations, documenting a shift from experimentation toward implementation and operational use.", "url": "https://www.digital.govt.nz/standards-and-guidance/technology-and-architecture/artificial-intelligence/research-ai-public-service/2026-cross-agency-ai-survey-highlights", "id": "event-068", "year": 2026, "month": 8}];
+const STATUS_LABELS = {"soft": "Soft law / guidance", "proposed": "Hard law proposed", "passed": "Hard law passed / in force", "revoked": "Hard law revoked / withdrawn"};
+const YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026];
+
+const searchInput = document.getElementById('search');
+const jurisdictionSelect = document.getElementById('jurisdiction');
+const spotlightBtn = document.getElementById('spotlight');
+const nzOnlyBtn = document.getElementById('nzOnly');
+const resetBtn = document.getElementById('reset');
+const printBtn = document.getElementById('print');
+const resultCount = document.getElementById('resultCount');
+const timelineRows = document.getElementById('timelineRows');
+const timelineShell = document.getElementById('timelineShell');
+const emptyState = document.getElementById('emptyState');
+const statusButtons = [...document.querySelectorAll('.status-filter')];
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modal = document.getElementById('modal');
+const modalClose = document.getElementById('modalClose');
+let lastFocused = null;
+
+const activeStatuses = new Set(['soft', 'proposed', 'passed', 'revoked']);
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+}
+
+function buildJurisdictions() {
+  const values = [...new Set(EVENTS.map(e => e.jurisdiction))].sort((a,b) => a.localeCompare(b));
+  for (const value of values) {
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = value;
+    jurisdictionSelect.appendChild(option);
+  }
+}
+
+function cardTemplate(event) {
+  const nzBadge = event.nz ? '<span class="nz-badge">NZ</span>' : '';
+  return `
+    <article class="event-card status-${event.status}${event.nz ? ' is-nz' : ''}"
+      tabindex="0" role="button" aria-label="Open details for ${escapeHtml(event.title)}"
+      data-id="${event.id}" data-status="${event.status}" data-nz="${event.nz}"
+      data-jurisdiction="${escapeHtml(event.jurisdiction)}"
+      data-search="${escapeHtml((event.title + ' ' + event.jurisdiction + ' ' + event.issuer + ' ' + event.description).toLowerCase())}">
+      <div class="event-meta">
+        <span class="date">${escapeHtml(event.dateLabel)}</span>
+        <span class="status-pill">${escapeHtml(STATUS_LABELS[event.status])}</span>
+      </div>
+      ${nzBadge}
+      <h3 class="event-title">${escapeHtml(event.title)}</h3>
+      <div class="event-issuer">${escapeHtml(event.issuer)}</div>
+      <div class="card-footer"><a class="source-link" href="${escapeHtml(event.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open external reference for ${escapeHtml(event.title)}">Source ↗</a></div>
+    </article>`;
+}
+
+function renderTimeline() {
+  timelineRows.innerHTML = '';
+  for (const year of YEARS) {
+    const byMonth = Array.from({ length: 12 }, () => []);
+    EVENTS.filter(e => e.year === year).sort((a,b) => a.date.localeCompare(b.date)).forEach(e => byMonth[e.month - 1].push(e));
+    const row = document.createElement('section');
+    row.className = 'year-row';
+    row.dataset.year = year;
+    row.innerHTML = `
+      <div class="year-label"><strong>${year}</strong><span class="year-count"></span></div>
+      <div class="months-grid">
+        ${byMonth.map((monthEvents, index) => `<div class="month-cell" data-month="${index + 1}">${monthEvents.map(cardTemplate).join('')}</div>`).join('')}
+      </div>`;
+    timelineRows.appendChild(row);
+  }
+
+  document.querySelectorAll('.event-card').forEach(card => {
+    card.addEventListener('click', (event) => {
+      if (event.target.closest('a')) return;
+      openModal(card.dataset.id, card);
+    });
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        if (event.target.closest('a')) return;
+        event.preventDefault();
+        openModal(card.dataset.id, card);
+      }
+    });
+  });
+  applyFilters();
+}
+
+function applyFilters() {
+  const query = searchInput.value.trim().toLowerCase();
+  const jurisdiction = jurisdictionSelect.value;
+  const nzOnly = nzOnlyBtn.getAttribute('aria-pressed') === 'true';
+  let shown = 0;
+  let shownNZ = 0;
+
+  document.querySelectorAll('.event-card').forEach(card => {
+    const matchesSearch = !query || card.dataset.search.includes(query);
+    const matchesJurisdiction = jurisdiction === 'all' || card.dataset.jurisdiction === jurisdiction;
+    const matchesStatus = activeStatuses.has(card.dataset.status);
+    const matchesNZ = !nzOnly || card.dataset.nz === 'true';
+    const visible = matchesSearch && matchesJurisdiction && matchesStatus && matchesNZ;
+    card.classList.toggle('is-filtered', !visible);
+    if (visible) {
+      shown++;
+      if (card.dataset.nz === 'true') shownNZ++;
+    }
+  });
+
+  document.querySelectorAll('.year-row').forEach(row => {
+    const visibleCards = [...row.querySelectorAll('.event-card')].filter(c => !c.classList.contains('is-filtered'));
+    row.classList.toggle('is-hidden', visibleCards.length === 0);
+    row.querySelector('.year-count').textContent = `${visibleCards.length} event${visibleCards.length === 1 ? '' : 's'}`;
+  });
+
+  resultCount.textContent = `${shown} shown · ${shownNZ} NZ`;
+  emptyState.classList.toggle('visible', shown === 0);
+}
+
+function openModal(id, trigger) {
+  const event = EVENTS.find(e => e.id === id);
+  if (!event) return;
+  lastFocused = trigger || document.activeElement;
+  modal.classList.toggle('nz-modal', event.nz);
+  document.getElementById('modalKicker').innerHTML = `<span class="modal-status ${event.status}">${escapeHtml(STATUS_LABELS[event.status])}</span>${event.nz ? '<span class="modal-nz">NZ highlighted</span>' : ''}`;
+  document.getElementById('modalTitle').textContent = event.title;
+  document.getElementById('modalDate').textContent = event.dateLabel;
+  document.getElementById('modalDesc').textContent = event.description;
+  document.getElementById('modalJurisdiction').textContent = event.jurisdiction;
+  document.getElementById('modalIssuer').textContent = event.issuer;
+  document.getElementById('modalStatusText').textContent = STATUS_LABELS[event.status];
+  document.getElementById('modalSource').href = event.url;
+  modalBackdrop.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  modalClose.focus();
+}
+
+function closeModal() {
+  modalBackdrop.classList.remove('open');
+  document.body.style.overflow = '';
+  if (lastFocused) lastFocused.focus();
+}
+
+searchInput.addEventListener('input', applyFilters);
+jurisdictionSelect.addEventListener('change', applyFilters);
+spotlightBtn.addEventListener('click', () => {
+  const next = spotlightBtn.getAttribute('aria-pressed') !== 'true';
+  spotlightBtn.setAttribute('aria-pressed', String(next));
+  timelineShell.classList.toggle('nz-spotlight', next);
+});
+nzOnlyBtn.addEventListener('click', () => {
+  const next = nzOnlyBtn.getAttribute('aria-pressed') !== 'true';
+  nzOnlyBtn.setAttribute('aria-pressed', String(next));
+  if (next) {
+    jurisdictionSelect.value = 'all';
+  }
+  applyFilters();
+});
+statusButtons.forEach(button => button.addEventListener('click', () => {
+  const status = button.dataset.status;
+  const isActive = button.getAttribute('aria-pressed') === 'true';
+  button.setAttribute('aria-pressed', String(!isActive));
+  if (isActive) activeStatuses.delete(status); else activeStatuses.add(status);
+  applyFilters();
+}));
+resetBtn.addEventListener('click', () => {
+  searchInput.value = '';
+  jurisdictionSelect.value = 'all';
+  activeStatuses.clear();
+  ['soft','proposed','passed','revoked'].forEach(s => activeStatuses.add(s));
+  statusButtons.forEach(b => b.setAttribute('aria-pressed', 'true'));
+  nzOnlyBtn.setAttribute('aria-pressed', 'false');
+  spotlightBtn.setAttribute('aria-pressed', 'true');
+  timelineShell.classList.add('nz-spotlight');
+  applyFilters();
+});
+printBtn.addEventListener('click', () => window.print());
+modalClose.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', (event) => { if (event.target === modalBackdrop) closeModal(); });
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && modalBackdrop.classList.contains('open')) closeModal(); });
+
+buildJurisdictions();
+renderTimeline();
+</script>
+</body>
+</html>
