@@ -30,9 +30,11 @@
   }
 
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; height: 100%; }
   body {
     margin: 0;
+    height: 100%;
+    overflow: hidden;
     background: var(--bg);
     color: var(--ink);
     font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -43,61 +45,67 @@
 
   .page {
     width: min(100%, 2560px);
+    height: 100vh;
     margin: 0 auto;
-    padding: 36px 32px 56px;
+    padding: 8px 12px 8px;
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    overflow: hidden;
   }
 
   .masthead {
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 24px;
-    align-items: end;
+    gap: 12px;
+    align-items: center;
     border-bottom: 2px solid var(--ink);
-    padding-bottom: 22px;
+    padding-bottom: 5px;
   }
   .eyebrow {
-    display: inline-flex;
+    display: none;
     align-items: center;
     gap: 8px;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 800;
     letter-spacing: .14em;
     text-transform: uppercase;
     color: var(--nz);
-    margin-bottom: 10px;
+    margin-bottom: 3px;
   }
-  .eyebrow::before { content: ""; width: 30px; height: 4px; background: var(--nz); border-radius: 20px; }
+  .eyebrow::before { content: ""; width: 24px; height: 3px; background: var(--nz); border-radius: 20px; }
   h1 {
     margin: 0;
-    font-size: clamp(38px, 5.2vw, 72px);
+    font-size: clamp(25px, 2.5vw, 34px);
     line-height: .98;
     letter-spacing: -0.045em;
     max-width: 980px;
   }
-  .range { color: #71747b; font-weight: 500; }
+  h1 br { display: none; }
+  .range { color: #71747b; font-weight: 500; margin-left: 10px; }
   .subtitle {
-    margin: 14px 0 0;
+    display: none;
+    margin: 0;
     color: var(--muted);
     max-width: 900px;
-    font-size: 16px;
+    font-size: 12px;
   }
   .nz-key {
     align-self: center;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 5px;
     border: 2px solid var(--nz);
     border-radius: 999px;
-    padding: 8px 14px 8px 8px;
+    padding: 3px 8px 3px 3px;
     background: var(--nz-soft);
     white-space: nowrap;
-    font-size: 13px;
+    font-size: 10px;
     font-weight: 750;
   }
   .nz-key b {
     background: var(--nz);
     color: white;
-    padding: 5px 12px;
+    padding: 2px 7px;
     border-radius: 999px;
     letter-spacing: .05em;
   }
@@ -106,40 +114,47 @@
     position: sticky;
     top: 0;
     z-index: 30;
-    margin-top: 20px;
+    margin-top: 6px;
     border: 1px solid var(--line);
     background: rgba(255,255,255,.96);
     backdrop-filter: blur(12px);
-    border-radius: 16px;
+    border-radius: 12px;
     box-shadow: 0 4px 18px rgba(0,0,0,.06);
-    padding: 14px;
+    padding: 6px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 10px;
+    row-gap: 5px;
   }
   .control-grid {
     display: grid;
-    grid-template-columns: minmax(230px, 1.3fr) minmax(180px, .8fr) auto auto;
-    gap: 10px;
+    grid-template-columns: minmax(210px, 1.3fr) minmax(160px, .75fr) auto auto;
+    gap: 7px;
     align-items: center;
+    grid-column: 1 / -1;
   }
   .field {
-    min-height: 42px;
+    min-height: 30px;
     border: 1px solid var(--line-strong);
     border-radius: 10px;
     background: white;
-    padding: 9px 12px;
+    padding: 4px 8px;
+    font-size: 12px;
     color: var(--ink);
     outline: none;
   }
   .field:focus { border-color: var(--focus); box-shadow: 0 0 0 3px rgba(59,102,245,.16); }
-  .toggle-group, .action-group { display: flex; gap: 8px; flex-wrap: wrap; }
+  .toggle-group, .action-group { display: flex; gap: 5px; flex-wrap: wrap; }
   .toggle, .action {
-    min-height: 42px;
+    min-height: 30px;
     border: 1px solid var(--line-strong);
     border-radius: 10px;
-    padding: 8px 12px;
+    padding: 3px 8px;
     background: white;
     color: var(--ink);
     cursor: pointer;
     font-weight: 700;
+    font-size: 12px;
   }
   .toggle[aria-pressed="true"] { border-color: var(--nz); color: var(--nz); background: var(--nz-soft); }
   .toggle:focus-visible, .action:focus-visible, .status-filter:focus-visible, .event-card:focus-visible, .source-link:focus-visible, .modal-close:focus-visible {
@@ -150,63 +165,131 @@
   .action.primary { background: var(--ink); color: white; border-color: var(--ink); }
   .action.primary:hover { background: #333; }
 
+  .zoom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+  .zoom-tools {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .zoom-button, .fit-button {
+    min-height: 27px;
+    border: 1px solid var(--line-strong);
+    border-radius: 9px;
+    background: white;
+    color: var(--ink);
+    cursor: pointer;
+    font-weight: 800;
+  }
+  .zoom-button {
+    width: 29px;
+    padding: 0;
+    font-size: 18px;
+    line-height: 1;
+  }
+  .fit-button { padding: 3px 8px; font-size: 11px; }
+  .fit-button[aria-pressed="true"] {
+    border-color: var(--nz);
+    color: var(--nz);
+    background: var(--nz-soft);
+  }
+  .zoom-button:hover, .fit-button:hover { border-color: #7f8792; }
+  .zoom-range {
+    width: min(145px, 20vw);
+    accent-color: var(--nz);
+    cursor: pointer;
+  }
+  .zoom-readout {
+    min-width: 42px;
+    font-size: 11px;
+    font-weight: 900;
+    text-align: center;
+    color: #3e424a;
+  }
+  .zoom-mode {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 3px 7px;
+    border-radius: 999px;
+    background: #f1f3f6;
+    color: #555a63;
+    font-size: 11px;
+    font-weight: 800;
+  }
   .filter-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
+    gap: 6px;
     flex-wrap: wrap;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--line);
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
   }
-  .status-filters, .legend { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .status-filters, .legend { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
   .status-filter {
     border: 1px solid var(--line);
     border-radius: 999px;
     background: white;
-    padding: 7px 11px;
+    padding: 3px 7px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    font-size: 12px;
+    gap: 5px;
+    font-size: 9px;
     font-weight: 750;
     color: #40434a;
   }
   .status-filter[aria-pressed="false"] { opacity: .42; text-decoration: line-through; }
-  .dot { width: 10px; height: 10px; border-radius: 3px; flex: 0 0 auto; }
+  .dot { width: 8px; height: 8px; border-radius: 3px; flex: 0 0 auto; }
   .dot.soft { background: var(--soft); }
   .dot.proposed { background: var(--proposed); }
   .dot.passed { background: var(--passed); }
   .dot.revoked { background: var(--revoked); }
-  .legend-note { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); }
-  .outline-dot { width: 20px; height: 14px; border: 2px solid var(--nz); border-radius: 5px; background: var(--nz-soft); }
-  .result-count { font-size: 12px; font-weight: 800; color: var(--muted); white-space: nowrap; }
+  .legend-note { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; color: var(--muted); }
+  .outline-dot { width: 16px; height: 11px; border: 2px solid var(--nz); border-radius: 4px; background: var(--nz-soft); }
+  .result-count { font-size: 10px; font-weight: 800; color: var(--muted); white-space: nowrap; }
 
   .timeline-shell {
-    margin-top: 22px;
+    margin-top: 6px;
+    min-height: 0;
     border: 1px solid var(--line);
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
     background: white;
     box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
   }
   .scroll-hint {
-    padding: 9px 14px;
-    font-size: 12px;
+    padding: 5px 10px;
+    font-size: 10px;
     color: var(--muted);
     border-bottom: 1px solid var(--line);
     background: #fafbfc;
   }
   .timeline-scroll {
-    max-height: calc(100vh - 250px);
-    min-height: 620px;
+    flex: 1 1 auto;
+    min-height: 0;
     overflow: auto;
     overscroll-behavior: contain;
     scrollbar-color: #aeb4be #f1f2f5;
   }
-  .timeline-inner { min-width: calc(var(--year-width) + 12 * var(--month-width)); }
+  .timeline-inner {
+    min-width: calc(var(--year-width) + 12 * var(--month-width));
+    transform-origin: top left;
+  }
+  .timeline-scroll.fit-view .timeline-inner { margin: 0 auto; }
   .month-header {
     position: sticky;
     top: 0;
@@ -348,6 +431,13 @@
     color: var(--muted);
     line-height: 1.25;
   }
+  .event-description {
+    display: none;
+    margin: 8px 0 0;
+    color: #4c515a;
+    font-size: 9.5px;
+    line-height: 1.38;
+  }
   .card-footer { margin-top: 9px; display: flex; justify-content: flex-end; }
   .source-link {
     display: inline-flex;
@@ -361,6 +451,102 @@
   }
   .source-link:hover { border-color: currentColor; }
 
+
+  /* The fitted Jan–Dec view stays compact while preserving readable titles. */
+  .timeline-shell.is-fit .month-cell {
+    min-height: 132px;
+    padding: 7px 6px 10px;
+  }
+  .timeline-shell.is-fit .month-name,
+  .timeline-shell.is-fit .month-header .corner { font-size: 15px; }
+  .timeline-shell.is-fit .year-label { padding: 12px 9px; }
+  .timeline-shell.is-fit .year-label strong { font-size: 24px; }
+  .timeline-shell.is-fit .year-label span { display: none; }
+  .timeline-shell.is-fit .event-card {
+    margin: 0 0 6px;
+    padding: 8px 7px;
+    border-radius: 8px;
+  }
+  .timeline-shell.is-fit .event-meta { margin-bottom: 4px; }
+  .timeline-shell.is-fit .date { font-size: 14px; }
+  .timeline-shell.is-fit .status-pill,
+  .timeline-shell.is-fit .event-issuer,
+  .timeline-shell.is-fit .event-description,
+  .timeline-shell.is-fit .card-footer { display: none; }
+  .timeline-shell.is-fit .nz-badge {
+    min-width: 26px;
+    height: 17px;
+    margin-bottom: 4px;
+  }
+  .timeline-shell.is-fit .event-title {
+    font-size: 19px;
+    line-height: 1.16;
+  }
+
+  /* Semantic zoom: overview marks → titles → full card details. */
+  .timeline-shell.zoom-overview .month-cell {
+    min-height: 72px;
+    padding: 5px 5px 8px;
+  }
+  .timeline-shell.zoom-overview .year-label { padding: 9px 8px; }
+  .timeline-shell.zoom-overview .year-label strong { font-size: 18px; }
+  .timeline-shell.zoom-overview .year-label span { display: none; }
+  .timeline-shell.zoom-overview .event-card {
+    height: 12px;
+    min-height: 12px;
+    margin: 0 0 3px;
+    padding: 0;
+    border-width: 1px;
+    border-left-width: 5px;
+    border-radius: 4px;
+    box-shadow: none;
+    overflow: hidden;
+  }
+  .timeline-shell.zoom-overview .event-card:hover {
+    transform: scaleY(1.8);
+    transform-origin: center;
+    box-shadow: 0 2px 8px rgba(20,26,38,.18);
+    z-index: 4;
+  }
+  .timeline-shell.zoom-overview .event-card.is-nz {
+    border: 2px solid var(--nz);
+    border-left: 6px solid var(--status-color);
+    background: var(--nz-soft);
+  }
+  .timeline-shell.zoom-overview .event-card > * { display: none !important; }
+
+  .timeline-shell.zoom-standard .event-issuer,
+  .timeline-shell.zoom-standard .event-description,
+  .timeline-shell.zoom-standard .card-footer { display: none; }
+  .timeline-shell.zoom-standard .month-cell { min-height: 132px; }
+
+  .timeline-shell.zoom-detail .month-cell { min-height: 190px; }
+  .timeline-shell.zoom-detail .event-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* CSS full-page mode keeps all controls while dedicating the viewport to the timeline. */
+  body.full-page .page {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    min-height: 0;
+    padding: 12px;
+    background: white;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    overflow: hidden;
+  }
+  body.full-page { overflow: hidden; }
+  body.full-page .masthead { display: none; }
+  body.full-page .controls { margin-top: 0; position: relative; top: auto; }
+  body.full-page .timeline-shell { margin-top: 10px; min-height: 0; height: auto; }
+
   .empty-state {
     display: none;
     padding: 48px 22px;
@@ -369,15 +555,6 @@
   }
   .empty-state.visible { display: block; }
 
-  .method-note {
-    margin: 18px 2px 0;
-    padding: 14px 16px;
-    border-left: 4px solid var(--nz);
-    background: #fafafa;
-    color: #555a63;
-    font-size: 12px;
-  }
-  .method-note strong { color: var(--ink); }
 
   .modal-backdrop {
     position: fixed;
@@ -447,36 +624,39 @@
   .modal-source:hover { background: #333; }
 
   @media (max-width: 1040px) {
-    .page { padding: 24px 18px 40px; }
+    .page { padding: 8px 10px; }
+  }
+  @media (max-width: 800px) {
     .masthead { grid-template-columns: 1fr; }
     .nz-key { justify-self: start; }
+    .controls { grid-template-columns: 1fr; }
     .control-grid { grid-template-columns: 1fr 1fr; }
-    .timeline-scroll { max-height: calc(100vh - 330px); }
   }
   @media (max-width: 640px) {
-    .page { padding: 18px 10px 30px; }
-    h1 { font-size: 42px; }
+    body { overflow: auto; }
+    .page { padding: 10px 8px 8px; }
+    h1 { font-size: 28px; }
     .control-grid { grid-template-columns: 1fr; }
+    .zoom-range { width: min(180px, 48vw); }
     .controls { border-radius: 12px; }
     .timeline-shell { border-radius: 12px; }
-    .timeline-scroll { max-height: calc(100vh - 410px); }
     .modal-grid { grid-template-columns: 1fr; gap: 4px; }
     .modal-grid dd { margin-bottom: 9px; }
   }
 
   @media print {
-    .page { padding: 0; }
+    html, body { height: auto; overflow: visible; }
+    .page { height: auto; display: block; padding: 0; overflow: visible; }
     .controls, .scroll-hint, .modal-backdrop { display: none !important; }
     .masthead { margin-bottom: 12px; }
     .timeline-shell { box-shadow: none; overflow: visible; }
-    .timeline-scroll { max-height: none; overflow: visible; }
-    .timeline-inner { transform: scale(.52); transform-origin: top left; width: 192%; }
-    .method-note { break-before: page; }
+    .timeline-scroll { overflow: visible; }
+    .timeline-inner { zoom: .52 !important; margin: 0 !important; }
   }
 </style>
 </head>
 <body>
-<main class="page">
+<main id="page" class="page">
   <header class="masthead">
     <div>
       <div class="eyebrow">Interactive policy map</div>
@@ -498,7 +678,18 @@
       </div>
       <div class="action-group">
         <button id="reset" class="action" type="button">Reset</button>
+        <button id="fullPage" class="action" type="button" aria-pressed="false">Full page</button>
         <button id="print" class="action primary" type="button">Print / save PDF</button>
+      </div>
+    </div>
+    <div class="zoom-row">
+      <div class="zoom-tools" aria-label="Timeline zoom controls">
+        <button id="zoomOut" class="zoom-button" type="button" aria-label="Zoom out">−</button>
+        <input id="zoomRange" class="zoom-range" type="range" min="30" max="200" step="5" value="100" aria-label="Timeline zoom level" />
+        <button id="zoomIn" class="zoom-button" type="button" aria-label="Zoom in">+</button>
+        <span id="zoomReadout" class="zoom-readout" aria-live="polite">100%</span>
+        <span id="zoomMode" class="zoom-mode">Titles</span>
+        <button id="fitTimeline" class="fit-button" type="button" aria-pressed="true">Fit full timeline</button>
       </div>
     </div>
     <div class="filter-row">
@@ -516,9 +707,8 @@
   </section>
 
   <section id="timelineShell" class="timeline-shell nz-spotlight" aria-label="AI governance timeline">
-    <div class="scroll-hint">Scroll horizontally for months and vertically for years. Select a card for details; use “Source ↗” to open its external reference.</div>
     <div id="timelineScroll" class="timeline-scroll">
-      <div class="timeline-inner">
+      <div id="timelineInner" class="timeline-inner">
         <div class="month-header" aria-hidden="true">
           <div class="corner">Year</div>
           <div class="month-name">Jan</div><div class="month-name">Feb</div><div class="month-name">Mar</div><div class="month-name">Apr</div>
@@ -530,10 +720,6 @@
       </div>
     </div>
   </section>
-
-  <aside class="method-note">
-    <strong>Scope and method.</strong> This is a redesigned, independent interactive timeline based on the supplied figure. Dates and legal-status labels are standardized to the referenced publication, adoption, issuance, entry-into-force, or withdrawal milestone. “Soft law / guidance” also includes institutional initiatives and voluntary frameworks. The selection is illustrative rather than exhaustive. Last verified 30 September 2026.
-  </aside>
 </main>
 
 <div id="modalBackdrop" class="modal-backdrop" role="presentation">
@@ -563,6 +749,15 @@ const spotlightBtn = document.getElementById('spotlight');
 const nzOnlyBtn = document.getElementById('nzOnly');
 const resetBtn = document.getElementById('reset');
 const printBtn = document.getElementById('print');
+const fullPageBtn = document.getElementById('fullPage');
+const zoomOutBtn = document.getElementById('zoomOut');
+const zoomInBtn = document.getElementById('zoomIn');
+const zoomRange = document.getElementById('zoomRange');
+const zoomReadout = document.getElementById('zoomReadout');
+const zoomMode = document.getElementById('zoomMode');
+const fitTimelineBtn = document.getElementById('fitTimeline');
+const timelineScroll = document.getElementById('timelineScroll');
+const timelineInner = document.getElementById('timelineInner');
 const resultCount = document.getElementById('resultCount');
 const timelineRows = document.getElementById('timelineRows');
 const timelineShell = document.getElementById('timelineShell');
@@ -577,6 +772,96 @@ const activeStatuses = new Set(['soft', 'proposed', 'passed', 'revoked']);
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+}
+
+
+const ZOOM_MIN = 0.30;
+const ZOOM_MAX = 2.00;
+const ZOOM_STEP = 0.10;
+let currentZoom = 1;
+let fitMode = true;
+let fitFrame = 0;
+
+function clampZoom(value) {
+  return Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, value));
+}
+
+function updateZoomPresentation() {
+  timelineShell.classList.remove('zoom-overview', 'zoom-standard', 'zoom-detail');
+  timelineShell.classList.toggle('is-fit', fitMode);
+  timelineScroll.classList.toggle('fit-view', fitMode);
+
+  let modeLabel = 'Jan–Dec';
+  if (!fitMode) {
+    if (currentZoom < 0.78) {
+      timelineShell.classList.add('zoom-overview');
+      modeLabel = 'Overview';
+    } else if (currentZoom < 1.18) {
+      timelineShell.classList.add('zoom-standard');
+      modeLabel = 'Titles';
+    } else {
+      timelineShell.classList.add('zoom-detail');
+      modeLabel = 'Full details';
+    }
+  }
+
+  zoomReadout.textContent = `${Math.round(currentZoom * 100)}%`;
+  zoomMode.textContent = modeLabel;
+  zoomRange.value = String(Math.round(currentZoom * 100));
+  fitTimelineBtn.setAttribute('aria-pressed', String(fitMode));
+}
+
+function setZoom(value, options = {}) {
+  const nextZoom = clampZoom(value);
+  const anchorX = options.anchorX ?? timelineScroll.clientWidth / 2;
+  const anchorY = options.anchorY ?? timelineScroll.clientHeight / 2;
+  const oldZoom = currentZoom || 1;
+  const contentX = (timelineScroll.scrollLeft + anchorX) / oldZoom;
+  const contentY = (timelineScroll.scrollTop + anchorY) / oldZoom;
+
+  fitMode = false;
+  currentZoom = nextZoom;
+  updateZoomPresentation();
+  timelineInner.style.zoom = String(currentZoom);
+
+  requestAnimationFrame(() => {
+    timelineScroll.scrollLeft = Math.max(0, contentX * currentZoom - anchorX);
+    timelineScroll.scrollTop = Math.max(0, contentY * currentZoom - anchorY);
+  });
+}
+
+function fitTimeline() {
+  cancelAnimationFrame(fitFrame);
+  fitMode = true;
+  timelineShell.classList.add('is-fit');
+  timelineShell.classList.remove('zoom-overview', 'zoom-standard', 'zoom-detail');
+  timelineScroll.classList.add('fit-view');
+  timelineInner.style.zoom = '1';
+
+  fitFrame = requestAnimationFrame(() => {
+    const availableWidth = Math.max(1, timelineScroll.clientWidth - 10);
+    const naturalWidth = Math.max(1, timelineInner.scrollWidth);
+    const fitted = Math.min(1, availableWidth / naturalWidth) * 0.995;
+    currentZoom = clampZoom(fitted);
+    timelineInner.style.zoom = String(currentZoom);
+    updateZoomPresentation();
+    timelineScroll.scrollLeft = 0;
+    timelineScroll.scrollTop = 0;
+  });
+}
+
+function scheduleFit() {
+  if (!fitMode) return;
+  cancelAnimationFrame(fitFrame);
+  fitFrame = requestAnimationFrame(() => requestAnimationFrame(fitTimeline));
+}
+
+function toggleFullPage(force) {
+  const next = typeof force === 'boolean' ? force : !document.body.classList.contains('full-page');
+  document.body.classList.toggle('full-page', next);
+  fullPageBtn.setAttribute('aria-pressed', String(next));
+  fullPageBtn.textContent = next ? 'Exit full page' : 'Full page';
+  requestAnimationFrame(() => requestAnimationFrame(fitTimeline));
 }
 
 function buildJurisdictions() {
@@ -596,6 +881,7 @@ function cardTemplate(event) {
       tabindex="0" role="button" aria-label="Open details for ${escapeHtml(event.title)}"
       data-id="${event.id}" data-status="${event.status}" data-nz="${event.nz}"
       data-jurisdiction="${escapeHtml(event.jurisdiction)}"
+      title="${escapeHtml(event.dateLabel + ' — ' + event.title)}"
       data-search="${escapeHtml((event.title + ' ' + event.jurisdiction + ' ' + event.issuer + ' ' + event.description).toLowerCase())}">
       <div class="event-meta">
         <span class="date">${escapeHtml(event.dateLabel)}</span>
@@ -604,6 +890,7 @@ function cardTemplate(event) {
       ${nzBadge}
       <h3 class="event-title">${escapeHtml(event.title)}</h3>
       <div class="event-issuer">${escapeHtml(event.issuer)}</div>
+      <p class="event-description">${escapeHtml(event.description)}</p>
       <div class="card-footer"><a class="source-link" href="${escapeHtml(event.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open external reference for ${escapeHtml(event.title)}">Source ↗</a></div>
     </article>`;
 }
@@ -668,6 +955,7 @@ function applyFilters() {
 
   resultCount.textContent = `${shown} shown · ${shownNZ} NZ`;
   emptyState.classList.toggle('visible', shown === 0);
+  if (fitMode) scheduleFit();
 }
 
 function openModal(id, trigger) {
@@ -726,14 +1014,39 @@ resetBtn.addEventListener('click', () => {
   spotlightBtn.setAttribute('aria-pressed', 'true');
   timelineShell.classList.add('nz-spotlight');
   applyFilters();
+  requestAnimationFrame(() => requestAnimationFrame(fitTimeline));
 });
+zoomOutBtn.addEventListener('click', () => setZoom(currentZoom - ZOOM_STEP));
+zoomInBtn.addEventListener('click', () => setZoom(currentZoom + ZOOM_STEP));
+zoomRange.addEventListener('input', () => setZoom(Number(zoomRange.value) / 100));
+fitTimelineBtn.addEventListener('click', fitTimeline);
+fullPageBtn.addEventListener('click', () => toggleFullPage());
+timelineScroll.addEventListener('wheel', (event) => {
+  if (!(event.ctrlKey || event.metaKey)) return;
+  event.preventDefault();
+  const rect = timelineScroll.getBoundingClientRect();
+  const factor = event.deltaY < 0 ? 1.10 : 0.90;
+  setZoom(currentZoom * factor, {
+    anchorX: event.clientX - rect.left,
+    anchorY: event.clientY - rect.top
+  });
+}, { passive: false });
+window.addEventListener('resize', scheduleFit);
 printBtn.addEventListener('click', () => window.print());
 modalClose.addEventListener('click', closeModal);
 modalBackdrop.addEventListener('click', (event) => { if (event.target === modalBackdrop) closeModal(); });
-document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && modalBackdrop.classList.contains('open')) closeModal(); });
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+  if (modalBackdrop.classList.contains('open')) {
+    closeModal();
+  } else if (document.body.classList.contains('full-page')) {
+    toggleFullPage(false);
+  }
+});
 
 buildJurisdictions();
 renderTimeline();
+requestAnimationFrame(() => requestAnimationFrame(fitTimeline));
 </script>
 </body>
 </html>
